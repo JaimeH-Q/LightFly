@@ -30,7 +30,9 @@ public class LightFly extends JavaPlugin {
             Bukkit.getConsoleSender().sendMessage(MessageUtils.getMessage(messagesManager.getPrefix() + "&aRegistered placeholders!"));
         }
 
-        }
+        Bukkit.getConsoleSender().sendMessage(MessageUtils.getMessage(messagesManager.getPrefix() + "&aPlugin enabled!"));
+
+    }
 
     public void onDisable(){
         playerTimeManager.shutdown();
@@ -51,5 +53,10 @@ public class LightFly extends JavaPlugin {
     }
     public PlayerTimeManager getPlayerTimeManager() {
         return playerTimeManager;
+    }
+
+    public void reloadPlugin(){
+        configManager.LoadConfig();
+        messagesManager.loadMessages();
     }
 }

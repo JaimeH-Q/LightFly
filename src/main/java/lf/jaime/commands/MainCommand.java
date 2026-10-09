@@ -25,7 +25,7 @@ public class MainCommand implements CommandExecutor {
             return true;
         }
         if(args[0].equalsIgnoreCase("reload")){
-            messages.loadMessages();
+            plugin.reloadPlugin();
             sender.sendMessage(MessageUtils.getMessage(messages.getPrefix() + messages.getReload()));
             return true;
         }

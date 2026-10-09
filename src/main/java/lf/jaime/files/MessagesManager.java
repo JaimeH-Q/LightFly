@@ -8,6 +8,7 @@ import java.util.List;
 public class MessagesManager {
     private final CustomConfig langFile;
 
+
     public MessagesManager(LightFly plugin, String lang){
         langFile = new CustomConfig(lang, "lang", plugin);
         loadMessages();
@@ -31,6 +32,8 @@ public class MessagesManager {
     private String invalidNumber;
     private String tempFlySuccess;
     private String tempFlyMessage;
+    private String tempFlyWarningMessage;
+    private String tempFlyFinished;
 
     public void loadMessages(){
         langFile.registerConfig();
@@ -53,6 +56,8 @@ public class MessagesManager {
         invalidNumber = messages.getString("invalid_number");
         tempFlySuccess = messages.getString("temp_fly_success");
         tempFlyMessage = messages.getString("temp_fly_message");
+        tempFlyWarningMessage = messages.getString("temp_fly_warning_message");
+        tempFlyFinished = messages.getString("temp_fly_finished");
     }
 
     public String getInvalidNumber() {
@@ -125,5 +130,13 @@ public class MessagesManager {
 
     public String getTempFlyMessage() {
         return tempFlyMessage;
+    }
+
+    public String getTempFlyWarningMessage() {
+        return tempFlyWarningMessage;
+    }
+
+    public String getTempFlyFinished() {
+        return tempFlyFinished;
     }
 }

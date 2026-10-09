@@ -55,16 +55,25 @@ public class Fly implements CommandExecutor {
         if(args.length == 1){
             if (!sender.hasPermission("lf.admin") &&
                     !sender.hasPermission("lf.fly.*") &&
-                    !sender.hasPermission("lf.fly")) {
+                    !sender.hasPermission("lf.fly")
+                    ) {
 
                 sender.sendMessage(getMessage(prefix + messages.getNoPermission()));
                 return true;
             }
 
 
+            if(isValidFlyState(args[0]) && sender instanceof Player playerSender){
+                toggleFlightSelf(playerSender, args[0].equals("on"));
+                return true;
+            } else if (!sender.hasPermission("lf.fly.others")){
+                sender.sendMessage(getMessage(prefix + messages.getNoPermission()));
+                return true;
+            }
+
             player = Bukkit.getPlayer(args[0]);
             if(player == null){
-                sender.sendMessage(getMessage(prefix + messages.getUnknownPlayer()));
+                sender.sendMessage(getMessage(prefix + messages.getUnknownPlayer().replace("%player%", args[0])));
                 return true;
             }
             if(player.getGameMode() == GameMode.CREATIVE && preventFlyInCreative){
@@ -80,7 +89,8 @@ public class Fly implements CommandExecutor {
         if(args.length == 2){
             if (!sender.hasPermission("lf.admin") &&
                     !sender.hasPermission("lf.fly.*") &&
-                    !sender.hasPermission("lf.fly")) {
+                    !sender.hasPermission("lf.fly") &&
+                    !sender.hasPermission("lf.fly.others")) {
 
                 sender.sendMessage(getMessage(prefix + messages.getNoPermission()));
                 return true;
@@ -126,6 +136,13 @@ public class Fly implements CommandExecutor {
 
         sender.sendMessage(getMessage(messages.getPrefix() + senderMessage
                 .replace("%player%", player.getName())));
+        player.setAllowFlight(enable);
+    }
+
+    private void toggleFlightSelf(Player player, boolean enable){
+        MessagesManager messages = plugin.getMessagesManager();
+        String playerMessage = enable ? messages.getFlyEnabled() : messages.getFlyDisabled();
+        player.sendMessage(getMessage(messages.getPrefix() + playerMessage));
         player.setAllowFlight(enable);
     }
 

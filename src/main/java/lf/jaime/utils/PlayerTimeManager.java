@@ -10,6 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import static lf.jaime.utils.MessageUtils.getMessage;
+
 public class PlayerTimeManager {
     private final ConcurrentHashMap<Player, Integer> playerTimers = new ConcurrentHashMap<>();
     private final LightFly plugin;
@@ -25,9 +27,12 @@ public class PlayerTimeManager {
             for (Player player : playerTimers.keySet()) {
                 int timeLeft = playerTimers.get(player);
                 try{
+                    checkForTimeWarning(timeLeft, player);
+
                     playerTimers.put(player, timeLeft - 1);
                     player.setAllowFlight(true);
-                    if (timeLeft <= 1) {
+                    if (timeLeft < 1) {
+                        sendTempFlyFinishedMessage(player);
                         playerTimers.remove(player);
                         player.setAllowFlight(false);
                     }
@@ -36,6 +41,28 @@ public class PlayerTimeManager {
                 };
             }
         }, 0, 1, TimeUnit.SECONDS);
+    }
+
+    private void sendTempFlyFinishedMessage(Player player) {
+        if(!plugin.getConfigManager().isSendTempFlyFinished()){
+            return;
+        }
+        String message = plugin.getMessagesManager().getPrefix()+  plugin.getMessagesManager().getTempFlyFinished();
+        player.sendMessage(getMessage(message));
+    }
+
+    private void checkForTimeWarning(int timeLeft, Player player) {
+        if(!plugin.getConfigManager().shouldSendTempFlyWarning()){
+            return;
+        }
+        if(plugin.getConfigManager().getTempFlyWarningTimes().contains(timeLeft)){
+            String message = plugin.getMessagesManager().getPrefix()+plugin.getMessagesManager().getTempFlyWarningMessage();
+            player.sendMessage(getMessage(message
+                    .replace("%time%", String.valueOf(timeLeft))));
+            return;
+        }
+
+
     }
 
     public void addPlayer(Player player, int seconds){
