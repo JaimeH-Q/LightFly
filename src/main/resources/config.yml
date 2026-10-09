@@ -22,4 +22,11 @@ time_warning_seconds:
   - 2
   - 1
 
+# Should temp fly time still run when a player is offline? Default: true
+temp_fly_time_offline: true
+
+# Should players keep their temp fly when world changes? Default: true
+keep_temp_fly_on_world_change: true
+
+
 

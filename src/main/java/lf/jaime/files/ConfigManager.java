@@ -15,6 +15,9 @@ public class ConfigManager {
     private List<Integer> tempFlyWarningTimes;
     private boolean sendTempFlyFinished;
 
+    private boolean tempFlyOffline;
+    private boolean keepTempFlyOnWorldChange;
+
 
     public ConfigManager(LightFly plugin){
         configFile = new CustomConfig("config.yml", null, plugin);
@@ -30,6 +33,8 @@ public class ConfigManager {
         sendTempFlyWarning = fileConfiguration.getBoolean("send_temp_fly_warning");
         tempFlyWarningTimes = fileConfiguration.getIntegerList("time_warning_seconds");
         sendTempFlyFinished = fileConfiguration.getBoolean("send_temp_fly_finished");
+        tempFlyOffline = fileConfiguration.getBoolean("temp_fly_time_offline", true);
+        keepTempFlyOnWorldChange = fileConfiguration.getBoolean("keep_temp_fly_on_world_change", true);
     }
 
     public boolean isPreventInGamemode() {
@@ -54,5 +59,13 @@ public class ConfigManager {
 
     public boolean isSendTempFlyFinished() {
         return sendTempFlyFinished;
+    }
+
+    public boolean isKeepTempFlyOnWorldChange() {
+        return keepTempFlyOnWorldChange;
+    }
+
+    public boolean isTempFlyOffline() {
+        return tempFlyOffline;
     }
 }
